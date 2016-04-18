@@ -1,0 +1,23 @@
+.container{
+	background:white;
+	height:100%;
+		display:table;
+		 box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+.table-hover tr{
+	cursor:pointer;
+}
+
+.hint{
+  color:grey;
+  font-size:0.8em;
+  margin:2px 5px;
+}
+
+html, body{
+	background-image: url(../img/background.jpg);
+	height:100%;
+}
+nav{
+	margin-top:-2px;
+}

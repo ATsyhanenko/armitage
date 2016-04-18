@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+	<definition name="base" template="/WEB-INF/tiles/base/index.jsp">
+		<put-attribute name="title" value="AAInfo. ver 0.0.2-SNAPSHOT" />
+		<put-attribute name="header" type="template"
+			value="/WEB-INF/tiles/components/header.jsp" />
+		<put-attribute name="mainblock" type="template"
+			value="/WEB-INF/tiles/components/locations.jsp" />
+	</definition>
+
+	<definition name="productList" template="/WEB-INF/tiles/components/productList.jsp"/>
+	<definition name="packageForm" template="/WEB-INF/tiles/components/packageForm.jsp"/>
+
+	<definition name="admin" template="/WEB-INF/tiles/base/index.jsp">
+		<put-attribute name="title"
+			value="Admin page of AAInfo. ver 0.0.2-SNAPSHOT" />
+	</definition>
+
+	
+</tiles-definitions>
