@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.armitage.inc.AAInfo.dao.LocationRepository;
+import org.armitage.inc.AAInfo.dao.UserRepository;
 import org.armitage.inc.AAInfo.entity.Location;
+import org.armitage.inc.AAInfo.entity.User;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -16,10 +18,24 @@ public class DataFiller {
     private Logger logger;
     
     @Autowired
-    LocationRepository locationRepository;
+    private LocationRepository locationRepository;
+    
+    @Autowired
+    private UserRepository userRepository;
     
     @Bean
     public Void fillInData(){
+        if(userRepository.count() < 1){
+            logger.info("Creating admin account");
+            User user = new User();
+            user.setUserName("admin");
+            user.setPassword("$2a$10$GCO0J2jn4nIfaPO8WzcHuuUrnaV.U/vDlUGOzdfpdrq1mB/3vV/mK");
+            user.setEnabled(1);
+            logger.info("saving");
+            userRepository.save(user);
+            logger.info("done");
+        }
+        
         if(locationRepository.count() < 1){
             logger.info("location repository is empty. Filling with data");
             List<Location> locations = new ArrayList<Location>();

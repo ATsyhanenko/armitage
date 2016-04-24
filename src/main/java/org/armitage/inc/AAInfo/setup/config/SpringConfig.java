@@ -3,6 +3,7 @@ package org.armitage.inc.AAInfo.setup.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -34,5 +35,14 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		registry.addResourceHandler("/res/**").addResourceLocations("uiresources/");
 	}
+	
+    @Bean(name = "messageSource")
+    public ReloadableResourceBundleMessageSource getMessageSource() {
+        ReloadableResourceBundleMessageSource resource =
+                new ReloadableResourceBundleMessageSource();
+        resource.setBasename("uiresources/localization/message");
+        resource.setDefaultEncoding("UTF-8");
+        return resource;
+    }
 
 }

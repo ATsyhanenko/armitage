@@ -6,4 +6,6 @@ public interface TradingPackService {
     void addNewPackage(TradingPackDto tradingPack);
 
     void savePackage(TradingPackDto tradingPackDto);
+
+    void deletePackage(Integer packId);
 }

@@ -54,6 +54,9 @@ public class HibernateConfig {
 		prop.put("hibernate.show_sql", env.getProperty("hibernate.show_sql"));
 		prop.put("hibernate.format_sql", env.getProperty("hibernate.format_sql"));
 		prop.put("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
+		prop.put("hibernate.connection.charset",env.getProperty("hibernate.connection.charset"));
+		prop.put("hibernate.connection.characterEncoding",env.getProperty("hibernate.connection.characterEncoding"));
+		prop.put("hibernate.connection.useUnicode",env.getProperty("hibernate.connection.useUnicode"));
 
 		return prop;
 	}

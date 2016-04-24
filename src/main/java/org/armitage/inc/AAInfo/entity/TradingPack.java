@@ -69,7 +69,15 @@ public class TradingPack {
         this.location = location;
     }
 
-
+    @Override
+    public boolean equals(Object arg){
+        if(arg instanceof TradingPack){
+            TradingPack comp = (TradingPack)arg;
+            return (comp.packId == this.packId);
+        }
+        return false;
+    }
+    
     @Override
     public String toString() {
         return "TradingPack [packId=" + packId + ", packName=" + packName + ", location=" + location

@@ -15,9 +15,13 @@
 }
 
 html, body{
-	background-image: url(../img/background.jpg);
+	background: url(../img/background.jpg) fixed;
+	background-size: scale;
 	height:100%;
 }
 nav{
 	margin-top:-2px;
+}
+#canvas{
+  background: url(../img/map2.jpg) left top;
 }

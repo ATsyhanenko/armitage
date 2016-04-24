@@ -7,16 +7,20 @@ import org.armitage.inc.AAInfo.dao.TradingPackRepository;
 import org.armitage.inc.AAInfo.dto.TradingPackDto;
 import org.armitage.inc.AAInfo.entity.Location;
 import org.armitage.inc.AAInfo.entity.TradingPack;
+import org.armitage.inc.AAInfo.service.SellingPriceService;
 import org.armitage.inc.AAInfo.service.TradingPackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class TradingPackServiceImpl implements TradingPackService{
     @Autowired
     private LocationRepository locationRepository;
     @Autowired
     private TradingPackRepository tradingPackRepository;
+    @Autowired
+    private SellingPriceService sellingPriceService;
     
     @Override
     @Transactional
@@ -40,6 +44,13 @@ public class TradingPackServiceImpl implements TradingPackService{
         tradingPack.setDesc(tradingPackDto.getDesc());
         tradingPack.setPackName(tradingPackDto.getTitle());
         tradingPackRepository.save(tradingPack);
+    }
+    
+    @Override
+    @Transactional
+    public void deletePackage(Integer packId){
+        sellingPriceService.deletePricesByPackId(packId);
+        tradingPackRepository.delete(packId);
     }
 
 }

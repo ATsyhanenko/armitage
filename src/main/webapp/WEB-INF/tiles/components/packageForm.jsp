@@ -10,21 +10,20 @@ $(document).ready(function(){
         var formData = $(this).serialize();
         var action = "${formAction}";
         var url = (action == "create") ? "addNewPack" : "editPack";
-        console.log("action: "+url)
+
         $.ajax({
             type: "POST",
             url: url,
             data: formData,
             success: function() {      
-                 var json = {
+                 var formData = {
                     locationId: locationId
                 }
                 $.ajax({
                     type: "GET",
                     url: "getPackList",
-                    data: json,
+                    data: formData,
                     success: function(data) {
-                        console.log("success")
                         packageList.css("min-height",packageList.css("height"))
                         packageList.fadeOut(50).html(data).fadeIn(200)
                         $("#packageInfo").fadeOut(50).html("")

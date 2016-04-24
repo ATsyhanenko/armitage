@@ -13,6 +13,9 @@
 
 	<definition name="productList" template="/WEB-INF/tiles/components/productList.jsp"/>
 	<definition name="packageForm" template="/WEB-INF/tiles/components/packageForm.jsp"/>
+	<definition name="sellingPricesList" template="/WEB-INF/tiles/components/sellingPriceList.jsp"/>
+	<definition name="sellingPriceForm" template="/WEB-INF/tiles/components/sellingPriceForm.jsp"/>
+	<definition name="sellingPriceDetail" template="/WEB-INF/tiles/components/sellingPriceDetail.jsp"/>
 
 	<definition name="admin" template="/WEB-INF/tiles/base/index.jsp">
 		<put-attribute name="title"
