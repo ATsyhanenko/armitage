@@ -1,6 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c'%>
-<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 
 <script type="text/javascript">
 var locationId;
@@ -12,7 +12,7 @@ $(document).ready(function(){
     var previouslySelected;
 
     $(".location").click(function(){
-        console.log("location#"+$(this).attr("rel")+" is clicked")
+        clearCanvas()
         if(previouslySelected != null){
             previouslySelected.removeClass("success")
         }
@@ -27,7 +27,6 @@ $(document).ready(function(){
             url: "getPackList",
             data: json,
             success: function(data) {
-                console.log("success")
                 packageList.css("min-height",packageList.css("height"))
                 packageList.fadeOut(50).html(data).fadeIn(200)
                 $("#packageInfo").fadeOut(50).html("")
@@ -35,7 +34,6 @@ $(document).ready(function(){
           });
         
         startPos = [$(this).attr("posX"), $(this).attr("posY")]
-    	console.log(startPos)
     })
 })
 
@@ -81,7 +79,7 @@ $(document).ready(function(){
 		}
         
         $(document).ready(function(){
-    		canvas = new fabric.Canvas('canvas');
+    		canvas = new fabric.StaticCanvas('canvas');
 
     		
     		var imgElement = document.getElementById('markerImg');
@@ -113,7 +111,7 @@ $(document).ready(function(){
       </div>
       <div class="clearfix visible-xs"></div>
       <div class="col-md-7">
-        <span><b>Выберите локацию</b></span>
+        <span><b><spring:message code="location.header"/></b></span>
         <table class="table table-hover">
           <tbody>
             <c:forEach items="${locationList}" var="location">

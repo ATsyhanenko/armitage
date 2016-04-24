@@ -42,17 +42,24 @@ public class XmlDataServiceImpl implements XmlDataService{
     @Override
     @Transactional
     public ByteArrayOutputStream formXmlStructure(){
+        logger.debug("begin");
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         DataRoot dataRoot = new DataRoot();
         
+        logger.debug("fetching location list");
         Sort locationSort = new Sort(Sort.Direction.ASC,"locationName");
         List<Location> locations = locationRepository.findAll(locationSort);
+        
+        logger.debug("fetching tradingpack list");
         Sort packSort = new Sort(Sort.Direction.ASC,"packName");
         List<TradingPack> tradingPacks = tradingPackRepository.findAll(packSort);
+        
+        logger.debug("fetching sellingprice list");
         Sort priceSort = new Sort(Sort.Direction.DESC,"packPrice");
         List<SellingPrice> sellingPrices = sellingPriceRepository.findAll(priceSort);
         
         List<LocationXML> locationsXML = new ArrayList<LocationXML>();
+        logger.debug("forming data to xml structure");
         for(Location location : locations){
             LocationXML locationXML = new LocationXML(location);
             locationsXML.add(locationXML);
@@ -76,19 +83,19 @@ public class XmlDataServiceImpl implements XmlDataService{
             }
             locationXML.setTradingPacks(tradingPacksXML);
         }
-        
+        logger.debug("finished");
         dataRoot.setLocations(locationsXML);
         
+        logger.debug("trying to form xml");
         try {
             JAXBContext context = JAXBContext.newInstance(DataRoot.class);
             Marshaller marshaller = context.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-            //marshaller.setProperty(Marshaller.JAXB_ENCODING, Boolean.TRUE);
             marshaller.marshal(dataRoot, output);
-            //marshaller.marshal(, System.out);
            } catch (JAXBException exception) {
-               logger.error(exception.getMessage());
+               logger.error("Couldn't form xml structure. Message: "+exception.getMessage());
            }
+        logger.debug("finished forming xml structure");
         return output;
     }
 }

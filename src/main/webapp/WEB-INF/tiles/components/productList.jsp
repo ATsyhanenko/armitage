@@ -1,6 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c'%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 
 <script>
 $(document).ready(function(){
@@ -69,7 +70,7 @@ $(document).ready(function(){
     
     $(".deletePack").click(function(event){
             var ev = event;
-            bootbox.confirm("Do you really want to delete this?", function(result){
+            bootbox.confirm('<spring:message code="pack.modaldelete"/>', function(result){
                 if (result) {
                   var data = {
                           packId: $(".deletePack").parents("tr").attr("rel")
@@ -105,7 +106,7 @@ $(document).ready(function(){
 })
 </script>
 
-<h3>Список производимых товаров 
+<h3><spring:message code="pack.header"/>
   <sec:authorize access="hasRole('ADMIN')">
     <button type="button" class="btn btn-success btn-xs addNewPackage"><span class="glyphicon glyphicon-plus-sign"></span></button>
   </sec:authorize>
@@ -120,9 +121,9 @@ $(document).ready(function(){
                   ${element.desc}
                     <sec:authorize access="hasRole('ADMIN')">
                                <div class="pull-right">
-                                  <button class="btn btn-sm btn-success editPack"><span class='glyphicon glyphicon-edit' title="Редактировать"></span></button>
+                                  <button class="btn btn-sm btn-success editPack"><span class='glyphicon glyphicon-edit' title='<spring:message code="pack.edit"/>'></span></button>
                                   
-                                  <button class="btn btn-sm btn-danger deletePack"><span class='glyphicon glyphicon-remove-sign' title="Удалить"></span></button>
+                                  <button class="btn btn-sm btn-danger deletePack"><span class='glyphicon glyphicon-remove-sign' title='<spring:message code="pack.delete"/>'></span></button>
                                 </div>
         
                       

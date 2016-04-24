@@ -16,7 +16,6 @@ import org.armitage.inc.AAInfo.extra.SalePrice;
 import org.armitage.inc.AAInfo.service.SellingPriceService;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -28,46 +27,51 @@ public class SellingPriceServiceImpl implements SellingPriceService {
     @Autowired
     private SellingPriceRepository sellingPriceRepository;
     @Autowired
-    private Logger log;
+    private Logger logger;
     
     @Override
     @Transactional
     public void saveNewSellingPrice(SellingPriceDto sellingPriceDto) {
+        logger.debug("begin");
         SellingPrice sellingPrice = new SellingPrice();
         Location location = locationRepository.findOne(sellingPriceDto.getLocation());
-        log.info("found location: "+location);
+        logger.debug("found location: "+location);
         TradingPack pack = tradingPackRepository.findOne(sellingPriceDto.getPack());
-        log.info("found pack: "+pack);
+        logger.debug("found pack: "+pack);
         
         sellingPrice.setLocation(location);
         sellingPrice.setPack(pack);
         sellingPrice.setPackPrice(sellingPriceDto.getPrice());
         
-        log.info("saving");
+        logger.debug("saving");
         sellingPriceRepository.save(sellingPrice);
+        logger.debug("end");
     }
     
     @Override
     public SellingPriceDto getPriceDto(Integer priceId){
+        logger.debug("begin");
         SellingPrice price = sellingPriceRepository.findOne(priceId);
         SellingPriceDto priceDto = new SellingPriceDto();
         priceDto.setPriceId(price.getPriceId());
         priceDto.setLocation(price.getLocation().getLocationId());
         priceDto.setPack(price.getPack().getPackId());
         priceDto.setPrice(price.getPackPrice());
-        
+        logger.debug("end");
         return priceDto;
     }
     
     @Override
     @Transactional
     public void saveEditedPrice(SellingPriceDto sellingPriceDto){
+        logger.debug("begin");
         SellingPrice sellingPrice = sellingPriceRepository.findOne(sellingPriceDto.getPriceId());
         Location location = locationRepository.findOne(sellingPriceDto.getLocation());
         sellingPrice.setLocation(location);
         sellingPrice.setPackPrice(sellingPriceDto.getPrice());
-        
+        logger.debug("saving");
         sellingPriceRepository.save(sellingPrice);
+        logger.debug("end");
     }
     
     @Override
@@ -86,15 +90,20 @@ public class SellingPriceServiceImpl implements SellingPriceService {
     @Override
     @Transactional
     public void deletePriceByPriceId(Integer priceId){
-        log.info("deleting price with id: "+priceId);
+        logger.debug("begin");
+        logger.debug("deleting price with id: "+priceId);
         sellingPriceRepository.delete(priceId);
+        logger.debug("end");
     }
     
     @Override
     @Transactional
     public void deletePricesByPackId(Integer packId){
+        logger.debug("begin");
         TradingPack pack = tradingPackRepository.findOne(packId);
         List<SellingPrice> prices = sellingPriceRepository.findByPack(pack);
+        logger.debug("deleting prices by pack id: "+packId);
         sellingPriceRepository.delete(prices);
+        logger.debug("end");
     }
 }

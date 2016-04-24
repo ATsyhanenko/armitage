@@ -44,22 +44,22 @@ $(document).ready(function(){
 </script>
 
 <c:if test="${formAction eq 'create'}">
-<h3>Добавление нового товара</h3>
+<h3><spring:message code="pack.form.addheader"/></h3>
 </c:if>
 
 <c:if test="${formAction eq 'edit'}">
-<h3>Редактирование товара</h3>
+<h3><spring:message code="pack.form.editheader"/></h3>
 </c:if>
 
 <form:form commandName="tradingPackDto" id="addNewPack">
    <input type="hidden" name="locationId" value="${locationId}"/>
    <form:input type="hidden" path="packId"/>
    <div class="input-group">
-      <span class="input-group-addon">Название товара: </span>
+      <span class="input-group-addon"><spring:message code="pack.form.title"/></span>
       <form:input path="title" type="text" length="100" name="name" class="form-control"/> 
    </div>
    <div class="form-group">
-      <form:textarea path="desc" class="form-control" rows="3" placeHolder="Описание"/>
+      <form:textarea path="desc" class="form-control" rows="3"/>
    </div>
-   <input type="submit" class="btn btn-success btn-sm" value="Подтвердить"/>
+   <input type="submit" class="btn btn-success btn-sm" value='<spring:message code="pack.form.confirm"/>'/>
 </form:form>

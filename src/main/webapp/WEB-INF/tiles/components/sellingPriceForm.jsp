@@ -1,7 +1,8 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c'%>
-<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 
 <script>
     $(document).ready(function() {
@@ -44,15 +45,15 @@
     })
 </script>
 <c:if test='${formAction eq "create"}'>
-<h3>Добавление новой точки сбыта</h3>
+<h3><spring:message code="price.form.addform"/></h3>
 </c:if>
 <c:if test='${formAction eq "edit"}'>
-<h3>Редактирование точки сбыта</h3>
+<h3><spring:message code="price.form.editform"/></h3>
 </c:if>
 <form:form commandName="sellingPrice" id="priceForm"
   class="form-horizontal">
   <div class="form-group">
-    <label for="packPrice" class="col-sm-2 control-label">Цена</label>
+    <label for="packPrice" class="col-sm-2 control-label"><spring:message code="price.form.price"/></label>
     <div class="col-sm-10">
       <form:input path="price" type="number" step="0.01"
         class="form-control" min="0.00" />
@@ -60,7 +61,7 @@
   </div>
 
   <div class="form-group">
-    <label for="priceLock" class="col-sm-2 control-label">Локация</label>
+    <label for="priceLock" class="col-sm-2 control-label"><spring:message code="price.form.location"/></label>
     <div class="col-sm-10">
       <select name="location" class="form-control" id="priceLock">
         <c:forEach items="${merchantList}" var="element">
@@ -81,16 +82,8 @@
   <div class="pull-right">
     <form:input type="hidden" path="pack" />
     <form:input type="hidden" path="priceId" />
-    <c:if test='${formAction eq "create"}'>
     <input type="submit" class="btn btn-success editPack"
-      value="Добавить" />
-    </c:if>
-    <c:if test='${formAction eq "edit"}'>
-    <input type="submit" class="btn btn-success editPack"
-      value="Сохранить" />
-    </c:if>
-    
+      value='<spring:message code="price.form.confirm"/>' />
   </div>
-
 </form:form>
 

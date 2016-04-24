@@ -10,7 +10,6 @@ import org.armitage.inc.AAInfo.entity.TradingPack;
 import org.armitage.inc.AAInfo.service.LocationService;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -26,19 +25,21 @@ public class LocationServiceImpl implements LocationService{
     
     @Override
     public List<Location> getMerchantsForTradingPackByPackId(Integer tradingPackId){
+        logger.debug("begin");
         TradingPack pack = tradingPackRepository.findOne(tradingPackId);
         List<Location> merchants = locationRepository.findAllMerchantsForTradePack(pack);
-        
+        logger.debug("end");
         return merchants;
     }
     
     @Override
     public List<Location> getMerchantsForTradingPackByDto(SellingPriceDto priceDto){
+        logger.debug("begin");
         TradingPack pack = tradingPackRepository.findOne(priceDto.getPack());
         Location selectedLocation = locationRepository.findOne(priceDto.getLocation());
         List<Location> merchants = locationRepository.findAllMerchantsForTradePack(pack);
         merchants.add(selectedLocation);
-        
+        logger.debug("end");
         return merchants;
     }
 }

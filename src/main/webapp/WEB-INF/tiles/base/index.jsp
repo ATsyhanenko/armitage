@@ -22,8 +22,8 @@
     <tiles:insertAttribute name="header" />
     <c:if test="${not empty SPRING_SECURITY_LAST_EXCEPTION}">
       <div class="alert alert-danger">
-        <h3>Your login attempt was not successful</h3>
-        due to:<br/>
+        <h3><spring:message code="Security.header"/></h3>
+        <b><spring:message code="Security.reason"/>: </b> 
         <c:out value="${SPRING_SECURITY_LAST_EXCEPTION.message}" />
  
       </div>

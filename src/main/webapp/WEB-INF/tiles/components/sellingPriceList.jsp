@@ -1,11 +1,11 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c'%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <script>
     $(document).ready(function() {
         $(".addNewPrice").click(function() {
 
-            console.log("addNewPackage clicked")
             var packId = $(".package.success").attr("rel")
             var data = {
                 packId : packId
@@ -82,7 +82,7 @@
         
         $(".deletePrice").click(function(event){
             var ev = event;
-            bootbox.confirm("Do you really want to delete this?", function(result){
+            bootbox.confirm('<spring:message code="price.modaldelete"/>', function(result){
                 if (result) {
                   var data = {
                           priceId: $(".deletePrice").parents("tr").attr("rel")
@@ -118,20 +118,18 @@
 
 
 <h3>
-  Список цен сдачи
+  <spring:message code="price.header"/>
   <sec:authorize access="hasRole('ADMIN')">
   <button type="button" class="btn btn-success btn-xs addNewPrice">
     <span class="glyphicon glyphicon-plus-sign"></span>
   </button>
   </sec:authorize>
 </h3>
-</button>
-</h3>
 <table class="table table-hover">
   <thead>
     <tr>
-      <td>Локация</td>
-      <td>Базовая цена</td>
+      <td><spring:message code="price.location"/></td>
+      <td><spring:message code="price.baseprice"/></td>
     </tr>
   </thead>
   <tbody>
@@ -140,22 +138,21 @@
         <td>${element.location.locationName}
         </td>
         <td>${element.packPrice}
-                  <div class="hide priceDetails"></div>
+                  <div class="hide priceDetails" style="min-height:383px"></div>
         </td>
         <td style="width:70px;">
         <sec:authorize access="hasRole('ADMIN')">
           <button class="btn btn-xs btn-success editPrice">
-            <span class='glyphicon glyphicon-edit' title="Редактировать"></span>
+            <span class='glyphicon glyphicon-edit' title='<spring:message code="price.edit"/>'></span>
           </button>
           
           <button class="btn btn-xs btn-danger deletePrice">
-            <span class='glyphicon glyphicon-remove-sign' title="Удалить"></span>
+            <span class='glyphicon glyphicon-remove-sign' title='<spring:message code="price.delete"/>'></span>
           </button>
         </sec:authorize>
         </td>
       </tr>
     </c:forEach>
   </tbody>
-
 </table>
 
