@@ -73,7 +73,6 @@ public class SpringWebSecurityConfig extends WebSecurityConfigurerAdapter {
         .tokenValiditySeconds(1209600);
 
         http.exceptionHandling().accessDeniedPage("/");
-        // http.csrf().disable();
 
         http.antMatcher("/**").authorizeRequests().anyRequest().permitAll();
     }

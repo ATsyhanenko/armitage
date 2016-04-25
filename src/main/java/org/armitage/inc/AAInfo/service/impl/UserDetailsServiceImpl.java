@@ -24,7 +24,7 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-	    User user = userRepository.getByLogin(username);
+	    final User user = userRepository.getByLogin(username);
 	    if(user == null){
 	        logger.warn("user with login \""+username+"\" not found");
 	        throw new UsernameNotFoundException(username);
@@ -34,7 +34,7 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 
 			@Override
 			public Collection<? extends GrantedAuthority> getAuthorities() {
-				List<GrantedAuthority> roles = Collections.singletonList(new SimpleGrantedAuthority("ROLE_ADMIN"));
+				List<SimpleGrantedAuthority> roles = Collections.singletonList(new SimpleGrantedAuthority("ROLE_ADMIN"));
 				return roles;
 			}
 
