@@ -6,6 +6,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.armitage.inc.AAInfo.setup.config.auth.AuthenticationDetailsSource;
+import org.armitage.inc.AAInfo.setup.config.auth.CustomAuthenticationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,7 +40,7 @@ public class SpringWebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/res/**"); // #3
+        web.ignoring().antMatchers("/res/**");
     }
 
     @Autowired
@@ -63,8 +65,14 @@ public class SpringWebSecurityConfig extends WebSecurityConfigurerAdapter {
             }
         });
 
-        http.formLogin().successHandler(savedRequestAwareAuthenticationSuccessHandler()).loginPage("/authenticate").usernameParameter("userLogin")
-                .passwordParameter("password").defaultSuccessUrl("/").failureUrl("/?error");
+        http.formLogin()
+            .authenticationDetailsSource(new AuthenticationDetailsSource())
+            .successHandler(savedRequestAwareAuthenticationSuccessHandler())
+            .loginPage("/authenticate")
+                .usernameParameter("userLogin")
+                .passwordParameter("password")
+            .defaultSuccessUrl("/", true)
+            .failureUrl("/?error");
         
         http.logout().logoutUrl("/authenticate/logout")
                 .logoutSuccessUrl("/");
@@ -73,7 +81,6 @@ public class SpringWebSecurityConfig extends WebSecurityConfigurerAdapter {
         .tokenValiditySeconds(1209600);
 
         http.exceptionHandling().accessDeniedPage("/");
-        // http.csrf().disable();
 
         http.antMatcher("/**").authorizeRequests().anyRequest().permitAll();
     }
@@ -82,7 +89,6 @@ public class SpringWebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected UserDetailsService userDetailsService() {
         return userDetailsService;
     }
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -92,7 +98,7 @@ public class SpringWebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     public DaoAuthenticationProvider authProvider(UserDetailsService userDetailsService,
             PasswordEncoder passwordEncoder) {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        DaoAuthenticationProvider authProvider = new CustomAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder);
         return authProvider;

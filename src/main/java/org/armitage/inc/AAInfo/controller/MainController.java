@@ -19,6 +19,7 @@ import org.armitage.inc.AAInfo.extra.SalePrice;
 import org.armitage.inc.AAInfo.service.LocationService;
 import org.armitage.inc.AAInfo.service.SellingPriceService;
 import org.armitage.inc.AAInfo.service.TradingPackService;
+import org.armitage.inc.AAInfo.service.UserService;
 import org.armitage.inc.AAInfo.service.XmlDataService;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -62,13 +64,17 @@ public class MainController {
 	
 	@Autowired
 	private XmlDataService xmlDataService;
+
+	@Autowired
+	private UserService userService;
 	
 	@RequestMapping(method = RequestMethod.GET)
 	public String showIndex(Model model){
 		Sort listSort = new Sort(Sort.Direction.ASC,"locationName");
 		List<Location> locationList = locationRepository.findAll(listSort);
-		
+		logger.info(SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString());
 		model.addAttribute("locationList", locationList);
+		
 		return "base";
 	}
 	
@@ -253,15 +259,37 @@ public class MainController {
 	    
 	    try {
             response.getOutputStream().write(byteOutput);
-            response.flushBuffer();
+            
+            try {
+                response.flushBuffer();
+            } catch (IOException e) {
+                logger.error("Couldn't flush data to output stream: "+e.getMessage());
+            }
         } catch (IOException e) {
-            logger.error("Couldn't flush data to output stream: "+e.getMessage());
+            logger.error("Couldn't write data to output stream: "+e.getMessage());
+        } finally{
+            try{
+                stream.close();
+            }catch(IOException e){
+                logger.error("Error closing input stream");
+            }
         }
+	}
+
+	@RequestMapping(value="/preAuth", method=RequestMethod.POST)
+	public String preAuth(Model model, @RequestParam("userLogin") String userLogin, @RequestParam("password") String password){
+	    boolean credentialsAccepted = userService.preAuthUserCheck(userLogin, password);
+	    if(credentialsAccepted){
+    	    model.addAttribute("login", userLogin);
+            model.addAttribute("password", password);
+            return "passAuth";
+	    }
+	    return "loginForm";
 	}
 	
 	@ExceptionHandler(Exception.class)
 	public String logException(Exception exception){
-	    logger.warn("Caught an exception. \n\tStackTrace: "+exception.fillInStackTrace() +"\n\tDetails: "+exception.getMessage());
+	    logger.warn("Caught an exception. \n\tStackTrace: "+exception+" ("+exception.fillInStackTrace() +")\n\tDetails: "+exception.getMessage());
 	    return "redirect:/";
 	}
 }

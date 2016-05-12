@@ -27,7 +27,8 @@
             data-toggle="dropdown"><span class="glyphicon glyphicon-user" style="margin-right:5px; position:relative; top:2px;"></span><spring:message code="nav.auth"/> <b class="caret"></b></a>
             <div class="dropdown-menu">
               <div class="col-md-12">
-                <form action="authenticate" method="post">
+                 <div id="loginForm">
+                <form action="preAuth" method="post" class="loginForm">
                   <div class="form-group">
                     <label for="loginForm1"><spring:message code="nav.auth.login"/></label> <input
                       type="text" id="loginForm1" class="form-control"
@@ -39,7 +40,6 @@
                       name="password" placeholder="Password">
                   </div>
                   <div class="form-group text-center">
-                   <label for="remeberMeId" style="font-size:0.85em; color:grey; font-weight:normal;"><spring:message code="nav.auth.remember"/></label><input type="checkbox" name="remember-me" id="rememberMeId" style="position:relative; top:2px; left:5px"/>
                     <input type="hidden" name="${_csrf.parameterName}"
                       value="${_csrf.token}" /> <input
                       type="submit"
@@ -47,8 +47,33 @@
                       btn-success btn-block" value='<spring:message code="nav.auth.submit"/>' />
                   </div>
                 </form>
-
-
+              </div>
+        
+<script>
+    $(document).ready(function(){
+    
+        $(".loginForm").submit(function(event){
+            var data = $(this).serialize();
+            console.log("submit: "+data.toString())
+            event.preventDefault();
+            
+            $.ajax({
+                type:"post",
+                data:data,
+                url: $(".loginForm").attr("action"),
+                success:function(data){
+                    console.log("ajax success")
+                    $("#loginForm").html(data)
+                },
+                error: function(data){
+                    console.log("ajax error: "+data)
+                }
+            })
+        })
+        
+    })
+    </script>
+        
               </div>
             </div>
            </li>

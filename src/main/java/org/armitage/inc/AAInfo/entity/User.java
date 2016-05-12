@@ -20,8 +20,17 @@ public class User {
     @Column(name="password ", nullable=false)
     private String password;
     
-    @Column(name="enabled", columnDefinition="tinyInt default 1")
+    @Column(name="enabled", columnDefinition="int default 1")
     private Integer enabled;
+    
+    @Column(name="secret", columnDefinition="varchar(64) default ''")
+    private String secret;
+    
+    @Column(name="key_period")
+    private Long keyPeriod;
+    
+    @Column(name="email", columnDefinition="varchar(64) default ''")
+    private String email;
 
     public Integer getId() {
         return id;
@@ -29,6 +38,30 @@ public class User {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getSecret() {
+        return secret;
+    }
+
+    public void setSecret(String secret) {
+        this.secret = secret;
+    }
+
+    public Long getKeyPeriod() {
+        return keyPeriod;
+    }
+
+    public void setKeyPeriod(Long keyPeriod) {
+        this.keyPeriod = keyPeriod;
     }
 
     public String getUserName() {

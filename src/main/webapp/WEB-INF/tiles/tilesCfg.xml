@@ -16,6 +16,10 @@
 	<definition name="sellingPricesList" template="/WEB-INF/tiles/components/sellingPriceList.jsp"/>
 	<definition name="sellingPriceForm" template="/WEB-INF/tiles/components/sellingPriceForm.jsp"/>
 	<definition name="sellingPriceDetail" template="/WEB-INF/tiles/components/sellingPriceDetail.jsp"/>
+	
+	<definition name="loginForm" template="/WEB-INF/tiles/components/loginForm.jsp"/>
+	<definition name="preAuth" template="/WEB-INF/tiles/components/preAuth.jsp"/>
+	<definition name="passAuth" template="/WEB-INF/tiles/components/passAuth.jsp"/>
 
 	<definition name="admin" template="/WEB-INF/tiles/base/index.jsp">
 		<put-attribute name="title"

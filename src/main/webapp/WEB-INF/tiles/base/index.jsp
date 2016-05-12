@@ -28,6 +28,7 @@
  
       </div>
     </c:if>
+
     <tiles:insertAttribute name="mainblock" />
   </div>
 </body>
