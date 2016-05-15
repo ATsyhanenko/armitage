@@ -4,9 +4,9 @@
    
 <form action="authenticate" method="post">
        <div class="form-group">
-        <label for="loginForm2">Secret Key</label> <input
+        <label for="loginForm2"><spring:message code="nav.auth.secret"/></label> <input
           type="text" id="loginForm2" class="form-control"
-          name="secret" value="Angel of Darkness">
+          name="secret">
       </div>
       <div class="form-group text-center">
        <label for="remeberMeId" style="font-size:0.85em; color:grey; font-weight:normal;"><spring:message code="nav.auth.remember"/></label><input type="checkbox" name="remember-me" id="rememberMeId" style="position:relative; top:2px; left:5px"/>

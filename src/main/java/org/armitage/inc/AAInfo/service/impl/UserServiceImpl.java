@@ -8,6 +8,7 @@ import javax.transaction.Transactional;
 import org.armitage.inc.AAInfo.dao.UserRepository;
 import org.armitage.inc.AAInfo.entity.User;
 import org.armitage.inc.AAInfo.service.MailService;
+import org.armitage.inc.AAInfo.service.PushService;
 import org.armitage.inc.AAInfo.service.UserService;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ public class UserServiceImpl implements UserService{
     
     @Autowired
     private MailService mailService;
+    
+    @Autowired
+    private PushService pushService;
     
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -42,28 +46,29 @@ public class UserServiceImpl implements UserService{
         
         logger.info("setting up key lifetime");
         long keyLifeTime = System.currentTimeMillis()+(KEY_LIFETIME * 1000);
-        Date expireDate = new Date(keyLifeTime);
-        logger.info("key will expire: "+expireDate.toString());
         user.setKeyPeriod(keyLifeTime);
         
         logger.info("pushing secret key info to user entity");
         userRepository.save(user);
-        
-        String message = "Your security key is: "+securityString+"\r\nThe key will expire on: "+expireDate;
-        logger.info("sending message");
-        mailService.sendMessage(user.getEmail(), "Security key ("+expireDate+")", message);
+       
+        sendSecurityKey(user);
     }
     
     @Override
-    @Transactional
-    public void clearSecurityKey(String userName){
-        User user = userRepository.getByLogin(userName);
-        if(user != null){
-            user.setSecret("");
-            userRepository.save(user);
-        }
+    public void sendSecurityKey(User user){
+    	long keyPeriod = user.getKeyPeriod();
+        Date expireDate = new Date(keyPeriod);
+        String secret = user.getSecret();
+        
+        String message = String.format("Your security key is: %s\r\nThe key will expire on: %s", secret, expireDate);
+        String topic = String.format("Security key (%s)", expireDate);
+        String email = user.getEmail();
+        logger.info("sending message");
+        mailService.sendMessage(email, topic, message);
+        logger.info("sending push message");
+        pushService.sendPushMessage(user, message);
     }
-    
+       
     @Override
     @Transactional
     public User getUserByLogin(String login){
@@ -74,11 +79,9 @@ public class UserServiceImpl implements UserService{
     @Override
     public boolean preAuthUserCheck(String username, String password){
         User user = getUserByLogin(username);
-        if(user != null){
-            if(passwordEncoder.matches(password, user.getPassword())){
-               createSecurityKey(user);
-               return true;
-            }
+        if(user != null && passwordEncoder.matches(password, user.getPassword())){
+           createSecurityKey(user);
+           return true;
         }
         return false;
     }

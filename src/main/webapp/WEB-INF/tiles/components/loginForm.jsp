@@ -1,6 +1,7 @@
 <%@ page language="java" pageEncoding="UTF-8"%>
 <%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c'%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <script>
     $(document).ready(function(){
     
@@ -25,11 +26,10 @@
         
     })
     </script>
-   <c:if test="${not empty SPRING_SECURITY_LAST_EXCEPTION}">
-      <div class="alert alert-danger">
-        <h3><spring:message code="Security.header"/></h3>
-        <b><spring:message code="Security.reason"/>: </b> 
-        <c:out value="${SPRING_SECURITY_LAST_EXCEPTION.message}" />
+
+   <c:if test="${not empty error}">
+      <div class="alert alert-danger" style="font-size:0.95em; padding:3px">
+        <c:out value="${error}" />
  
       </div>
     </c:if>

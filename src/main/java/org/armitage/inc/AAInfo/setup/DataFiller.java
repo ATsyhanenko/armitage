@@ -26,17 +26,21 @@ public class DataFiller {
     
     @Bean
     public Void fillInData(){
-        if(userRepository.count() < 1){
-            logger.info("Creating admin account");
-            User user = new User();
-            user.setUserName("admin");
-            user.setPassword("$2a$10$GCO0J2jn4nIfaPO8WzcHuuUrnaV.U/vDlUGOzdfpdrq1mB/3vV/mK");
-            user.setEmail("sunchase1989@gmail.com");
-            user.setEnabled(1);
-            logger.info("saving");
-            userRepository.save(user);
-            logger.info("done");
-        }
+    	User user = userRepository.getByLogin("admin");
+    	if(user == null){
+    		logger.info("admin account not found. Creating... ");
+    		user = new User();
+    	}
+        logger.info("Setting admin account");
+        user.setUserName("admin");
+        user.setPassword("$2a$10$GCO0J2jn4nIfaPO8WzcHuuUrnaV.U/vDlUGOzdfpdrq1mB/3vV/mK");
+        user.setEmail("sunchase1989@gmail.com");
+        user.setPushToken("udcfeievo6pfypkkv62oiegqj3wu3k");
+        user.setEnabled(1);
+        logger.info("saving");
+        userRepository.save(user);
+        logger.info("done");
+
         
         if(locationRepository.count() < 1){
             logger.info("location repository is empty. Filling with data");

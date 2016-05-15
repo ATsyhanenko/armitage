@@ -20,6 +20,8 @@ public class MailServiceImpl implements MailService{
     @Async
     public void sendMessage(String to, String topic, String text){
         logger.info("begin");
+        logger.info("sending message to "+to);
+        logger.info("thread: "+Thread.currentThread());
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(to);
         message.setSubject(topic);

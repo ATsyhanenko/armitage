@@ -32,7 +32,18 @@ public class User {
     @Column(name="email", columnDefinition="varchar(64) default ''")
     private String email;
 
-    public Integer getId() {
+    @Column(name="pushToken")
+    private String pushToken;
+    
+    public String getPushToken() {
+		return pushToken;
+	}
+
+	public void setPushToken(String pushToken) {
+		this.pushToken = pushToken;
+	}
+
+	public Integer getId() {
         return id;
     }
 

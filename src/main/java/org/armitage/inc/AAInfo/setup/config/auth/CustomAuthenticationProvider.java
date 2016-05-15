@@ -1,9 +1,11 @@
 package org.armitage.inc.AAInfo.setup.config.auth;
 
-import org.armitage.inc.AAInfo.service.UserService;
+import java.util.Locale;
+
 import org.armitage.inc.AAInfo.service.impl.UserDetailsWithExtraKey;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -15,7 +17,7 @@ public class CustomAuthenticationProvider extends DaoAuthenticationProvider{
     @Autowired
     private Logger logger;
     @Autowired
-    private UserService userService;
+    private MessageSource messageSource;
 
     @Override
     protected void additionalAuthenticationChecks(UserDetails userDetails,
@@ -32,17 +34,17 @@ public class CustomAuthenticationProvider extends DaoAuthenticationProvider{
                 
                 if(actualKey == null || !actualKey.equals(expectedKey)){
                     logger.info("expected: "+expectedKey+", got: "+actualKey);
-                    throw new BadCredentialsException("Invalid secret key");
+                    String message = messageSource.getMessage("AbstractUserDetailsAuthenticationProvider.badSecret",null, Locale.getDefault());
+                    throw new BadCredentialsException(message);
                 }
                 
                 long serverTime = System.currentTimeMillis();
                 Long keyLifeTime = userDetailsWithKey.getKeyLifeTime();
                 if(keyLifeTime == null || serverTime > keyLifeTime){
                     logger.info("key expired");
-                    throw new BadCredentialsException("Secret key is expired");
+                    String message = messageSource.getMessage("AbstractUserDetailsAuthenticationProvider.keyExpired",null, Locale.getDefault());
+                    throw new BadCredentialsException(message);
                 }
-                
-                userService.clearSecurityKey(userDetailsWithKey.getUsername());
             }else{
                 logger.error("couldnt cast to CustomAuthenticationDetails");
             }

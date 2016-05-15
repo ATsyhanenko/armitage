@@ -3,6 +3,7 @@ package org.armitage.inc.AAInfo.controller;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -23,11 +24,11 @@ import org.armitage.inc.AAInfo.service.UserService;
 import org.armitage.inc.AAInfo.service.XmlDataService;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -68,11 +69,13 @@ public class MainController {
 	@Autowired
 	private UserService userService;
 	
+	@Autowired
+	private MessageSource messageSource;
+	
 	@RequestMapping(method = RequestMethod.GET)
 	public String showIndex(Model model){
 		Sort listSort = new Sort(Sort.Direction.ASC,"locationName");
 		List<Location> locationList = locationRepository.findAll(listSort);
-		logger.info(SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString());
 		model.addAttribute("locationList", locationList);
 		
 		return "base";
@@ -284,6 +287,8 @@ public class MainController {
             model.addAttribute("password", password);
             return "passAuth";
 	    }
+	    String errorMessage = "AbstractUserDetailsAuthenticationProvider.badCredentials";
+	    model.addAttribute("error", messageSource.getMessage(errorMessage, null, Locale.getDefault()));
 	    return "loginForm";
 	}
 	
